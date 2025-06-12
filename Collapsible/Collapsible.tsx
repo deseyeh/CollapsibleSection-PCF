@@ -1,9 +1,16 @@
 import * as React from "react";
 import { FontIcon } from "@fluentui/react";
+import {
+  FluentProvider,
+  makeStyles,
+  ToggleButton,
+  Tooltip,
+  webLightTheme,
+} from "@fluentui/react-components";
 
 export interface ICollapseProps {
   name?: string;
-  isClosed: boolean;
+  toggleValue: boolean;
   textColor: string;
   bgColor: string;
   hoverColor: string;
@@ -16,7 +23,7 @@ export interface ICollapseProps {
 
 const Collapse = ({
   name,
-  isClosed,
+  toggleValue,
   textColor,
   bgColor,
   hoverColor,
@@ -26,7 +33,7 @@ const Collapse = ({
   leftIcon,
   hideFields,
 }: ICollapseProps) => {
-  const [isCollapsed, setIsCollapsed] = React.useState(isClosed);
+  const [isCollapsed, setIsCollapsed] = React.useState(toggleValue);
   const [isHover, setIsHover] = React.useState(false);
 
   const buttonStyle: React.CSSProperties = {
@@ -43,44 +50,62 @@ const Collapse = ({
     borderRadius: "3px",
   };
 
-  const handleExpand = () => {
-    hideFields(!isCollapsed);
-    setIsCollapsed(!isCollapsed);
-  };
+  // const handleExpand = (newChecked: boolean) => {
+  //   if (newChecked !== isCollapsed) {
+  //     setIsCollapsed(newChecked);
+  //     hideFields(newChecked);
+  //   }
+  // };
+
+  // React.useEffect(() => {
+  //   console.log("useEffect", isClosed);
+  //   handleExpand(isClosed);
+  // }, [isClosed]);
+
   const leftFluentIcon = leftIcon && (
     <FontIcon iconName={leftIcon} style={{ marginRight: 8, fontSize: 16 }} />
   );
-
+  const handleToggleChange = React.useCallback(
+    (newChecked: boolean) => {
+      setIsCollapsed(newChecked);
+      hideFields(newChecked);
+    },
+    [isCollapsed]
+  );
+  // Sync with parent state when `toggleValue` changes
   React.useEffect(() => {
-    setIsCollapsed(isClosed);
-  }, [isClosed]);
+    handleToggleChange(toggleValue);
+  }, [toggleValue]);
 
   return (
-    <button
-      style={{
-        ...buttonStyle,
-        backgroundColor: isHover ? hoverColor : buttonStyle.backgroundColor,
-      }}
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
-      onClick={handleExpand}
-    >
-      {leftFluentIcon}
-
-      <span
+    <FluentProvider theme={webLightTheme}>
+      <ToggleButton
         style={{
-          display: "flex",
-          width: "100%",
-          alignSelf: "start",
+          ...buttonStyle,
+          backgroundColor: isHover ? hoverColor : buttonStyle.backgroundColor,
         }}
+        checked={isCollapsed}
+        onMouseEnter={() => setIsHover(true)}
+        onMouseLeave={() => setIsHover(false)}
+        onClick={() => handleToggleChange(!isCollapsed)}
       >
-        {name}
-      </span>
-      <FontIcon
-        iconName={isCollapsed ? "ChevronUpMed" : "ChevronDownMed"}
-        style={{ marginRight: 8, fontSize: 16 }}
-      />
-    </button>
+        {leftFluentIcon}
+
+        <span
+          style={{
+            display: "flex",
+            width: "100%",
+            alignSelf: "start",
+          }}
+        >
+          {name}
+        </span>
+        <FontIcon
+          iconName={isCollapsed ? "ChevronUpMed" : "ChevronDownMed"}
+          style={{ marginRight: 8, fontSize: 16 }}
+        />
+      </ToggleButton>
+    </FluentProvider>
   );
 };
 

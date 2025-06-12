@@ -6,18 +6,9 @@ export class Collapsible implements ComponentFramework.ReactControl<IInputs, IOu
     private theComponent: ComponentFramework.ReactControl<IInputs, IOutputs>;
     private notifyOutputChanged: () => void;
     private context: ComponentFramework.Context<IInputs>;
-    
-    private collapsedByDefault: boolean
     private collapsibleToggle: boolean
-    private label: string
     private textSize: number
-    private textWeight: string
-    private textpadding: string
-    private textColor: string
-    private backgroundColor: string
-    private hoverColor: string
-    private fieldLogicalNames: string
-    private leftIcon: string
+    private fieldLogicalNames: string 
     private outputValue: boolean
 
 
@@ -40,18 +31,6 @@ export class Collapsible implements ComponentFramework.ReactControl<IInputs, IOu
     ): void {
         this.notifyOutputChanged = notifyOutputChanged;
         this.context = context
-        this.collapsedByDefault = context.parameters.collapsedByDefault?.raw
-        this.collapsibleToggle = this.collapsedByDefault?this.collapsedByDefault: context.parameters.collapsibleToggle?.raw
-        this.label = context.parameters.label?.raw ?? "Collapsible"
-        this.textSize = context.parameters.textSize?.raw ?? 14
-        this.textWeight = context.parameters.textWeight?.raw??"normal"
-        this.textColor = context.parameters.textColor?.raw??"black"
-        this.backgroundColor = context.parameters.backgroundColor?.raw??"white"
-        this.hoverColor = context.parameters.hoverColor?.raw ?? "#f7f7f7"
-        this.textpadding = context.parameters.textPadding?.raw ?? "10px 5px"
-        this.fieldLogicalNames = context.parameters.fieldLogicalNames?.raw ?? ""
-        this.leftIcon = context.parameters.leftIcon?.raw ?? ""
-        this.outputValue = this.collapsibleToggle
 
         // Default State
         this.handleHideFields(this.collapsibleToggle)
@@ -90,21 +69,18 @@ export class Collapsible implements ComponentFramework.ReactControl<IInputs, IOu
     public updateView(context: ComponentFramework.Context<IInputs>): React.ReactElement {
       
         const props: ICollapseProps = {
-            name: this.label,
-            isClosed: this.collapsibleToggle,
-            textWeight: this.textWeight,
-            textColor: this.textColor,
-            bgColor: this.backgroundColor,
-            hoverColor: this.hoverColor,
-            textPadding: this.textpadding,
-            leftIcon: this.leftIcon,
-            textSize: this.textSize,
+            name: context.parameters.label?.raw ?? "Collapsible",
+            toggleValue: context.parameters.collapsibleToggle?.raw,
+            textWeight: context.parameters.textWeight?.raw??"normal",
+            textColor: context.parameters.textColor?.raw??"black",
+            bgColor: context.parameters.backgroundColor?.raw??"white",
+            hoverColor: context.parameters.hoverColor?.raw ?? "white",
+            textPadding: context.parameters.textPadding?.raw ?? "10px 5px",
+            leftIcon: context.parameters.leftIcon?.raw ?? "",
+            textSize: context.parameters.textSize?.raw ?? 14,
             hideFields: (currentState) => {
-
                 this.notifyOutputChanged()
                 this.outputValue = currentState
-                console.log("after notify "+ currentState)
-
                 this.handleHideFields(currentState)
             }
            };
