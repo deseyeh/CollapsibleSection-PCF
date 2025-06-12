@@ -20,7 +20,8 @@ The **Collapsible Section PCF Control** introduces a  flexible way to organize f
 
 ---
 
-## 📸 Example
+## 🚀 Example
+![Sample Image](https://github.com/CollapsibleSection/blob/main/assets/CollapsibleControl.gif)
 
 
 ---
@@ -51,6 +52,7 @@ If your collapsible section hides required fields, you must inform users that a 
 - You want to **display a notification** on the header field if the required field is empty.
 
 ### ✅ Example JavaScript: Show Notification on Header Control
+![Sample Image](https://github.com/deseyeh/CollapsibleSection/blob/main/assets/Collapsible control.gif)
 
 ```javascript
 function onLoad(executionContext) {
