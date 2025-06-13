@@ -21,7 +21,7 @@ The **Collapsible Section PCF Control** introduces a  flexible way to organize f
 ---
 
 ## 🚀 Example
-![Sample Image](https://github.com/CollapsibleSection/blob/main/assets/CollapsibleControl.gif)
+![Sample Image]([https://github.com/CollapsibleSection/blob/main/assets/CollapsibleControl.gif](https://github.com/deseyeh/CollapsibleSection/blob/main/assset/CollapsibleControl.gif))
 
 
 ---
