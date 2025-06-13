@@ -1,16 +1,17 @@
+/* eslint-disable no-undef */
 import Collapse, { ICollapseProps } from "./Collapsible";
 import { IInputs, IOutputs } from "./generated/ManifestTypes";
 import * as React from "react";
+import { initializeIcons } from '@fluentui/react/lib/Icons';
+initializeIcons(undefined, { disableWarnings: true });
 
 export class Collapsible implements ComponentFramework.ReactControl<IInputs, IOutputs> {
     private theComponent: ComponentFramework.ReactControl<IInputs, IOutputs>;
     private notifyOutputChanged: () => void;
     private context: ComponentFramework.Context<IInputs>;
-    private collapsibleToggle: boolean
-    private textSize: number
     private fieldLogicalNames: string 
     private outputValue: boolean
-
+    private toggleValue: boolean
 
     /**
      * Empty constructor.
@@ -30,64 +31,55 @@ export class Collapsible implements ComponentFramework.ReactControl<IInputs, IOu
         state: ComponentFramework.Dictionary
     ): void {
         this.notifyOutputChanged = notifyOutputChanged;
-        this.context = context
-
+        this.context = context;
+        this.toggleValue = context.parameters.collapsibleToggle?.raw ;
+        this.fieldLogicalNames = context.parameters.fieldLogicalNames?.raw ?? ""
         // Default State
-        this.handleHideFields(this.collapsibleToggle)
-
-        console.log("init "+ this.outputValue)
+        this.handleHideFields(this.toggleValue)  
     }
 
-    public handleHideFields(currentState:boolean): void {
-
-         if (this.fieldLogicalNames) {
-            if (typeof Xrm !== "undefined") {
-           
-                const fieldsToHide = this.fieldLogicalNames.split(",").map(field => field.trim())
-                console.log(fieldsToHide)
-               
-                fieldsToHide.forEach(fields => {
-                    // eslint-disable-next-line no-undef
-                    const thisfield = Xrm.Page.getControl(fields) as Xrm.Controls.StandardControl | null;
-                    thisfield?.setVisible(!currentState);  
-                    console.log(fields + "v1") 
-                    // eslint-disable-next-line no-undef
-                    console.log( Xrm.Page.getControl(fields)?.getVisible() ) 
-                })
-                
-            }
+    public handleHideFields(currentState: boolean): void {
+        if (this.fieldLogicalNames && typeof Xrm !== "undefined") {
+            const fieldsToHide = this.fieldLogicalNames.split(",").map(field => field.trim());
+            console.log("fieldsToHide", fieldsToHide)
+            fieldsToHide.forEach(field => {
+                const formContext = Xrm.Page;
+                const fieldControl = formContext.getControl(field) as Xrm.Controls.StandardControl | null;
+                // Hide or show the field
+                fieldControl?.setVisible(!currentState);               
+            });   
         }
     }
-
-
-
+    
     /**
      * Called when any value in the property bag has changed. This includes field values, data-sets, global values such as container height and width, offline status, control metadata values such as label, visible, etc.
      * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
      * @returns ReactElement root react element for the control
      */
     public updateView(context: ComponentFramework.Context<IInputs>): React.ReactElement {
-      
+        const theme = context.fluentDesignLanguage?.tokenTheme ;
+        this.toggleValue = context.parameters.collapsibleToggle?.raw;
+        console.log("updateView "+ this.toggleValue )
         const props: ICollapseProps = {
             name: context.parameters.label?.raw ?? "Collapsible",
-            toggleValue: context.parameters.collapsibleToggle?.raw,
+            toggleValue: this.toggleValue,
             textWeight: context.parameters.textWeight?.raw??"normal",
             textColor: context.parameters.textColor?.raw??"black",
             bgColor: context.parameters.backgroundColor?.raw??"white",
             hoverColor: context.parameters.hoverColor?.raw ?? "white",
             textPadding: context.parameters.textPadding?.raw ?? "10px 5px",
             leftIcon: context.parameters.leftIcon?.raw ?? "",
-            textSize: context.parameters.textSize?.raw ?? 14,
+            textSize: context.parameters.textSize?.raw ?? 14, 
+            theme: theme,
             hideFields: (currentState) => {
                 this.notifyOutputChanged()
                 this.outputValue = currentState
                 this.handleHideFields(currentState)
             }
-           };
+        };
         return React.createElement(
             Collapse, props
         );
-
     }
 
     /**

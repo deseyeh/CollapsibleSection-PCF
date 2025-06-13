@@ -2,10 +2,9 @@ import * as React from "react";
 import { FontIcon } from "@fluentui/react";
 import {
   FluentProvider,
-  makeStyles,
   ToggleButton,
-  Tooltip,
   webLightTheme,
+  Theme,
 } from "@fluentui/react-components";
 
 export interface ICollapseProps {
@@ -18,6 +17,7 @@ export interface ICollapseProps {
   textWeight: string;
   textPadding: string;
   leftIcon: string;
+  theme: Theme;
   hideFields: (currentState: boolean) => void;
 }
 
@@ -31,6 +31,7 @@ const Collapse = ({
   textWeight,
   textPadding,
   leftIcon,
+  theme,
   hideFields,
 }: ICollapseProps) => {
   const [isCollapsed, setIsCollapsed] = React.useState(toggleValue);
@@ -41,8 +42,6 @@ const Collapse = ({
     backgroundColor: bgColor,
     color: textColor,
     padding: textPadding,
-    cursor: "pointer",
-    display: "flex",
     justifyContent: "space-between",
     fontSize: `${textSize}px`,
     fontWeight: textWeight,
@@ -50,25 +49,12 @@ const Collapse = ({
     borderRadius: "3px",
   };
 
-  // const handleExpand = (newChecked: boolean) => {
-  //   if (newChecked !== isCollapsed) {
-  //     setIsCollapsed(newChecked);
-  //     hideFields(newChecked);
-  //   }
-  // };
-
-  // React.useEffect(() => {
-  //   console.log("useEffect", isClosed);
-  //   handleExpand(isClosed);
-  // }, [isClosed]);
-
-  const leftFluentIcon = leftIcon && (
-    <FontIcon iconName={leftIcon} style={{ marginRight: 8, fontSize: 16 }} />
-  );
   const handleToggleChange = React.useCallback(
     (newChecked: boolean) => {
-      setIsCollapsed(newChecked);
-      hideFields(newChecked);
+      if (newChecked !== isCollapsed) {
+        setIsCollapsed(newChecked);
+        hideFields(newChecked);
+      }
     },
     [isCollapsed]
   );
@@ -77,8 +63,12 @@ const Collapse = ({
     handleToggleChange(toggleValue);
   }, [toggleValue]);
 
+  const leftFluentIcon = leftIcon && (
+    <FontIcon iconName={leftIcon} style={{ marginRight: 8, fontSize: 16 }} />
+  );
+
   return (
-    <FluentProvider theme={webLightTheme}>
+    <FluentProvider style={{ width: "100%" }} theme={theme && webLightTheme}>
       <ToggleButton
         style={{
           ...buttonStyle,
@@ -101,12 +91,11 @@ const Collapse = ({
           {name}
         </span>
         <FontIcon
-          iconName={isCollapsed ? "ChevronUpMed" : "ChevronDownMed"}
+          iconName={isCollapsed ? "ChevronRightMed" : "ChevronDownMed"}
           style={{ marginRight: 8, fontSize: 16 }}
         />
       </ToggleButton>
     </FluentProvider>
   );
 };
-
 export default Collapse;
