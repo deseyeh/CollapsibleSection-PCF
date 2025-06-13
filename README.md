@@ -21,9 +21,8 @@ The **Collapsible Section PCF Control** introduces a  flexible way to organize f
 ---
 
 ## 🚀 Example
-![Sample Image]([https://github.com/CollapsibleSection/blob/main/assets/CollapsibleControl.gif](https://github.com/deseyeh/CollapsibleSection/blob/main/assset/CollapsibleControl.gif))
-
-
+![Sample Image](https://github.com/deseyeh/CollapsibleSection/blob/main/assset/CollapsibleEx.gif)
+ 
 ---
 
 ## ✅ Best Practices
@@ -41,6 +40,11 @@ The **Collapsible Section PCF Control** introduces a  flexible way to organize f
 
 ---
 
+## 🛠️ Adding Control to Form
+ 
+![Sample Image](https://github.com/deseyeh/CollapsibleSection/blob/main/assset/CollapsibleControl.gif)
+
+
 ## 🛠️ Adding Control Notifications to the Collapsible Header Field
 
 If your collapsible section hides required fields, you must inform users that a required field is empty. This can be done by setting a **Control Notification** on the **header field** ( Yes/No toggle).
@@ -52,7 +56,6 @@ If your collapsible section hides required fields, you must inform users that a 
 - You want to **display a notification** on the header field if the required field is empty.
 
 ### ✅ Example JavaScript: Show Notification on Header Control
-![Sample Image](https://github.com/deseyeh/CollapsibleSection/blob/main/assets/Collapsible control.gif)
 
 ```javascript
 function onLoad(executionContext) {
